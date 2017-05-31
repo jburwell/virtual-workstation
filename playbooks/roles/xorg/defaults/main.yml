@@ -1,0 +1,5 @@
+---
+# defaults file for xorg
+
+xorg_pkg_video_driver: "xf86-video-vmware"
+xorg_pkg_input_driver: "xf86-input-vmmouse"

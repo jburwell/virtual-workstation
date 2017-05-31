@@ -1,0 +1,50 @@
+---
+# tasks file for xorg
+
+- name: Install xorg-server, apps, drivers, and some fonts
+  pacman:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - cantarell-fonts
+    - tex-gyre-fonts
+    - ttf-liberation
+    - xorg-server
+    - xorg-apps
+    - xorg-fonts-misc
+    - "{{ xorg_pkg_video_driver }}"
+    - "{{ xorg_pkg_input_driver }}"
+  become: true
+
+- name: Link font configurations
+  file:
+    src: "/etc/fonts/conf.avail/{{ item }}"
+    dest: "/etc/fonts/conf.d/{{ item }}"
+    state: link
+  with_items:
+    - 10-hinting-slight.conf
+    - 10-sub-pixel-rgb.conf
+    - 11-lcdfilter-default.conf
+  become: true
+
+- name: Install font-meta-base/font-meta-base-extended dependencies
+  include_role:
+    name: jtyr.archlinux_aur
+  vars:
+    archlinux_aur_pkgs:
+      #      - "ttf-noto-fonts-ib"
+      - gsfonts-type1
+      - ttf-courier-prime
+      - ttf-dejavu-ib
+      - ttf-heuristica
+      - ttf-symbola-ib
+      - ttf-droid-family-ib
+      - ttf-google-fonts-git
+      - ttf-ubuntu-font-family-ib
+      - fonts-meta-base
+      - fonts-meta-extended-lt
+  become: true
+
+
+
+

@@ -1,0 +1,18 @@
+---
+# tasks file for yaourt
+
+- name: Install yajl
+  pacman:
+    name: yajl
+    state: present
+  become: true
+
+- name: Install package-query and yaourt from AUR
+  include_role:
+    name: jtyr.archlinux_aur
+  vars:
+    archlinux_aur_pkgs:
+      - "package-query"
+      - "yaourt"
+  become: true
+
