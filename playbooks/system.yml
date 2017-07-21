@@ -1,0 +1,10 @@
+---
+- hosts: all
+  vars:
+    archlinux_aur_user: vagrant
+    yaourt_use_git: true
+
+  roles:
+    - networkmanager
+    - vmware-tools
+

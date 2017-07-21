@@ -1,0 +1,4 @@
+---
+# defaults file for networkmanager
+
+networkmanager_plugins: []

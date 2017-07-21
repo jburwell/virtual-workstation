@@ -3,7 +3,7 @@
 
 Vagrant.configure("2") do |config|
 
-  config.vm.box = "wholebits/archlinux"
+  config.vm.box = "generic/arch"
 
   # Create a forwarded port mapping which allows access to a specific port
   # within the machine from a port on the host machine. In the example below,
@@ -53,23 +53,43 @@ Vagrant.configure("2") do |config|
 
   # Install the dependencies required for Ansible
   config.vm.provision "shell", inline: <<-SHELL
-    pacman -S python2 python2-pip --noconfirm
+    pacman -S --noconfirm python2 python2-pip
 
-    function make_symlink() {
-      if [ ! -h "$2" ] && [ ! -e "$2" ]; then
-        ln -s $1 $2
-     fi
-    }
+    # function make_symlink() {
+    #  if [ ! -h "$2" ] && [ ! -e "$2" ]; then
+    #    ln -s "$1 $2"
+    # fi
+    #}
 
-    make_symlink "/usr/bin/python2" "/usr/bin/python"
-    make_symlink "/usr/bin/python2-config" "/usr/bin/python-config"
+    #make_symlink "/usr/bin/python2" "/usr/bin/python"
+    #make_symlink "/usr/bin/python2-config" "/usr/bin/python-config"
   SHELL
+
+  # Installs and configures system-level utiitlies
+  config.vm.provision "ansible_local" do |ansible|
+    ansible.galaxy_role_file = "playbooks/requirements.yml"
+    ansible.galaxy_roles_path = "playbooks/.galaxy-roles"
+    ansible.playbook = "playbooks/system.yml"
+    ansible.host_vars = {
+        "default" => {
+            "ansible_python_interpreter" => "/usr/bin/python2"
+        }
+    }
+  end
+
+  # Reboot to catch changes to the init image
+  config.vm.provision "reload"
 
   # Install X and i3 ...
   config.vm.provision "ansible" do |ansible|
     ansible.galaxy_role_file = "playbooks/requirements.yml"
     ansible.galaxy_roles_path = "playbooks/.galaxy-roles"
-    ansible.playbook = "playbooks/xwindows-i3.yml"
+    ansible.playbook = "playbooks/xorg-i3.yml"
+    ansible.host_vars = {
+        "default" => {
+            "ansible_python_interpreter" => "/usr/bin/python2"
+        }
+    }
   end
 
 end

@@ -1,0 +1,35 @@
+---
+# tasks file for vmware-tools
+
+- name: Install open-vm-tools and its dependencies
+  yaourt:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - gtk2
+    - gtkmm
+    - "open-vm-tools"
+    - "open-vm-tools-dkms"
+
+- name: Enable and start VMware tools services
+  service:
+    name: "{{ item }}"
+    state: started
+    enabled: true
+  with_items:
+    - vmtoolsd
+    - "vmware-vmblock-fuse"
+  become: true
+
+- name: Update mkinitcpio.conf to load VMware kernel modules
+  file:
+    src: mkinitcpio.conf
+    dest: /etc/mkinitcpio.conf
+    owner: root
+    group: root
+    mode: 0644
+  become: true
+
+- name: Rebuilding the boot image
+  shell: mkinitcpio -p linux
+  become: true

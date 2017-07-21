@@ -13,7 +13,7 @@
 
 # Environment variables
 #EDITOR="$EDITOR"
-#TMPDIR="/tmp"
+TMPDIR="{{ yaourt_tmp_dir }}"
 #VISUAL="$VISUAL"
 
 # SUDO
@@ -34,7 +34,7 @@
 #AURSHOWDIFF=0
 #AURUPGRADE=0
 #AURVOTE=1
-#AURUSEGIT=0
+AURUSEGIT={{ yaourt_use_git | bool_to_int }}
 
 # Build
 #EXPORT=0           # Export to 1: EXPORTDIR or PKGDEST

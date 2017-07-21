@@ -1,2 +1,5 @@
 ---
 # defaults file for yaourt
+
+yaourt_use_git: false
+yaourt_tmp_dir: /var/cache/aur

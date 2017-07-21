@@ -1,6 +1,22 @@
 ---
 # tasks file for yaourt
 
+- name: Create AUR temporary directory
+  file:
+    path: "{{ yaourt_tmp_dir }}"
+    state: directory
+    owner: root
+    group: root
+    mode: 0777
+  become: true
+
+- name: If necessary, install git
+  pacman:
+    name: git
+    state: present
+  when: yaourt_use_git
+  become: true
+
 - name: Install yajl
   pacman:
     name: yajl
@@ -16,3 +32,11 @@
       - "yaourt"
   become: true
 
+- name: Add yaourt configuration
+  template:
+    src: yaourtrc.j2
+    dest: /etc/yaourtrc
+    owner: root
+    group : root
+    mode: 0644
+  become: true

@@ -1,3 +1,6 @@
 ---
 
 - src: jtyr.archlinux_aur
+
+- src: https://github.com/jburwell/ansible-role-ntpd
+  version: jsb/archlinux-support

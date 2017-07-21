@@ -1,0 +1,28 @@
+---
+# tasks file for networkmanager
+
+- name: Install NetworkManager
+  pacman:
+    name: networkmanager
+    state: present
+  become: true
+
+- name: Install NetworkManager plugins
+  pacman:
+    name: "networkmanager-{{ item }}"
+    state: present
+  with_items: "{{ networkmanager_plugins }}"
+  become: true
+
+- name: Start NetworkManager
+  service:
+    name: "{{ item }}"
+    state: started
+    enabled: true
+  with_items:
+    - NetworkManager
+    - NetworkManager-dispatcher
+  become: true
+
+
+
